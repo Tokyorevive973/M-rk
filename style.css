@@ -1,0 +1,125 @@
+/* Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Oxanium:wght@300;400;700&display=swap');
+
+body {
+    margin: 0;
+    font-family: 'Oxanium', sans-serif;
+    background: #050505;
+    color: #fff;
+}
+
+/* ANIMATED BACKGROUND */
+#bg {
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at center, #00111a, #000000);
+    z-index: -2;
+}
+
+#bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: url('https://i.imgur.com/8wPukJC.png');
+    opacity: 0.07;
+    animation: moveBg 40s linear infinite;
+}
+
+@keyframes moveBg {
+    from { transform: translate(0,0); }
+    to   { transform: translate(-600px, -600px); }
+}
+
+/* NAVBAR */
+.navbar {
+    width: 100%;
+    padding: 20px 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: rgba(0,0,0,0.55);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid #008cff5f;
+}
+
+.logo {
+    font-size: 26px;
+    font-weight: 700;
+    color: #00c8ff;
+    text-shadow: 0 0 10px #00c8ff;
+}
+.logo span {
+    color: #ffffff;
+}
+
+.nav-links {
+    list-style: none;
+    display: flex;
+    gap: 25px;
+}
+
+.nav-links a {
+    color: #fff;
+    text-decoration: none;
+    font-weight: 400;
+    transition: 0.3s;
+}
+
+.nav-links a:hover {
+    color: #00c8ff;
+    text-shadow: 0 0 10px #00c8ff;
+}
+
+/* MAIN CONTENT */
+.container {
+    max-width: 1000px;
+    margin: 60px auto;
+    padding: 20px;
+}
+
+.title {
+    text-align: center;
+    font-size: 40px;
+    color: #00c8ff;
+    text-shadow: 0 0 25px #00c8ff;
+    margin-bottom: 40px;
+}
+
+/* NEWS GRID */
+.hirek-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 25px;
+}
+
+/* NEWS CARD */
+.hir-card {
+    background: rgba(0,0,0,0.65);
+    padding: 20px;
+    border-radius: 12px;
+    border: 1px solid #008cff4e;
+    box-shadow: 0 0 15px #008cff4e;
+    transition: 0.25s;
+    position: relative;
+    overflow: hidden;
+}
+
+.hir-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 0 20px #00bfff, 0 0 50px #0099ff;
+}
+
+.hir-card h3 {
+    margin-top: 0;
+    color: #00c8ff;
+}
+
+.hir-card p {
+    opacity: 0.85;
+}
+
+.date {
+    font-size: 13px;
+    opacity: 0.5;
+    margin-top: 10px;
+}
