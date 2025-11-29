@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BlackCoreGames - Hírek</title>
+
+    <style>
+        /* ----- Global style ----- */
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            background: #0e0e0e;
+            color: white;
+        }
+
+        /* ----- NAVBAR ----- */
+        nav {
+            background: linear-gradient(90deg, #0f0f0f, #1c1c1c, #0f0f0f);
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 0 15px #00a2ff70;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        nav .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00a2ff;
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px #00a2ff;
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+        nav ul li a:hover {
+            color: #00a2ff;
+            text-shadow: 0 0 15px #00a2ff;
+        }
+
+        /* ----- Container ----- */
+        .container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        h2 {
+            text-align: center;
+            font-size: 32px;
+            margin-bottom: 25px;
+            color: #00a2ff;
+            text-shadow: 0 0 10px #00a2ff;
+        }
+
+        /* ----- Table ----- */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #141414;
+            box-shadow: 0 0 20px #00a2ff50;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        th, td {
+            padding: 15px;
+            text-align: left;
+        }
+
+        th {
+            background: #0a0a0a;
+            color: #00a2ff;
+            text-transform: uppercase;
+            font-size: 14px;
+            border-bottom: 2px solid #00a2ff50;
+        }
+
+        tr {
+            transition: 0.2s;
+        }
+
+        tr:nth-child(even) {
+            background: #1a1a1a;
+        }
+
+        tr:hover {
+            background: #002b4a;
+        }
+
+        .anim {
+            animation: fadeIn 0.5s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+    <div class="logo">BlackCoreGames</div>
+    <ul>
+        <li><a href="#">Főoldal</a></li>
+        <li><a href="#">Hírek</a></li>
+        <li><a href="#">Játékok</a></li>
+        <li><a href="#">Kapcsolat</a></li>
+    </ul>
+</nav>
+
+<div class="container">
+    <h2>Legfrissebb Hírek</h2>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Hír</th>
+                <th>Dátum</th>
+            </tr>
+        </thead>
+        <tbody id="hirkod"></tbody>
+    </table>
+</div>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
+import { getDatabase, ref, onChildAdded } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAIiNyMlJtR4aEVC3Oykaq-qmnfQ7gcTk4",
+  authDomain: "hirekprojekt.firebaseapp.com",
+  databaseURL: "https://hirekprojekt-default-rtdb.europe-west1.firebasedatabase.app/",
+  projectId: "hirekprojekt",
+  storageBucket: "hirekprojekt.firebasestorage.app",
+  messagingSenderId: "77751928510",
+  appId: "1:77751928510:web:e9f7adab3a291f9e38c0ef",
+  measurementId: "G-JQT4LYTVHQ"
+};
+
+// Inicializálás
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const hirekRef = ref(db, "hirek");
+const hirkod = document.getElementById("hirkod");
+
+// Kiírás tábla formában
+onChildAdded(hirekRef, snapshot => {
+    const hir = snapshot.val();     // "Első hír"
+    const datum = "—";              // ha csak string van, nincs dátum
+
+    const tr = document.createElement("tr");
+    tr.classList.add("anim");
+
+    tr.innerHTML = `
+        <td>${hir}</td>
+        <td>${datum}</td>
+    `;
+
+    hirkod.appendChild(tr);
+});
+</script>
+
+</body>
+</html>
