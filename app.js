@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-app.js";
-import { getDatabase, ref, onChildAdded } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
+import { getDatabase, ref, onChildAdded, onValue } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAIiNyMlJtR4aEVC3Oykaq-qmnfQ7gcTk4",
@@ -12,24 +12,52 @@ const firebaseConfig = {
   measurementId: "G-JQT4LYTVHQ"
 };
 
-// Init
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const hirekRef = ref(db, "hirek");
 
 const hirekLista = document.getElementById("hirekLista");
 
-onChildAdded(hirekRef, snapshot => {
-    const szoveg = snapshot.val();
-    const datum = new Date().toLocaleDateString("hu-HU");
+// Betöltési animáció
+hirekLista.innerHTML = `
+<div class="loader">Betöltés...</div>
+`;
 
+// Ha üres a lista, akkor "Nincs hír" szöveg
+onValue(hirekRef, snapshot => {
+    if (!snapshot.exists()) {
+        hirekLista.innerHTML = `
+            <p class="empty">Jelenleg nincs megjeleníthető hír.</p>
+        `;
+    }
+});
+
+// Új hír érkezik
+onChildAdded(hirekRef, snapshot => {
+    const adat = snapshot.val();
+
+    const szoveg = adat.szoveg || snapshot.val();
+    const timestamp = adat.timestamp || Date.now();
+
+    const datum = new Date(timestamp).toLocaleDateString("hu-HU", {
+        year: "numeric",
+        month: "long",
+        day: "numeric"
+    });
+
+    // Kártya létrehozása
     const card = document.createElement("div");
-    card.className = "hir-card";
+    card.className = "hir-card fade-in";
 
     card.innerHTML = `
         <h3>${szoveg}</h3>
-        <p class="date">Dátum: ${datum}</p>
+        <p class="date">${datum}</p>
     `;
 
+    // Legújabb előre
     hirekLista.prepend(card);
+
+    // Töröljük a betöltő animációt
+    const loader = document.querySelector(".loader");
+    if (loader) loader.remove();
 });
